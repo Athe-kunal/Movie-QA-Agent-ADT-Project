@@ -170,6 +170,7 @@ def main_scraper(
         df["review_rating"] = reviews_rating
 
         # print(df)
-        df.to_csv(f"movie_reviews/{movie_name}.csv", index=False)
+        save_name = "_".join(movie_name.split(" "))
+        df.to_csv(f"movie_reviews/{save_name}.csv", index=False)
 
     return reviews_date, reviews_title, reviews_comment, reviews_rating
