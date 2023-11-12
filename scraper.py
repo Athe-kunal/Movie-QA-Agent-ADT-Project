@@ -10,11 +10,16 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-
+import os
+import wikipediaapi
+from langchain.document_loaders import WikipediaLoader
+import pandas as pd
+from tqdm import tqdm
 import imdb
-
+from typing import List
 
 os.makedirs('movie_reviews',exist_ok=True)
+os.makedirs("wikipedia_data",exist_ok=True)
 
 def clean_text(text: str) -> str:
     """Clean raw text string.
@@ -88,19 +93,20 @@ def scrape_data(revs):
     contents = clean_text(contents)
     return date, contents, rating, title
 
-    
-
 
 def main_scraper(
-    movie_name: str, webdriver_engine: str = "edge", generate_csv: bool = True
+    movie_name: str, wikipedia_module,webdriver_engine: str = "edge", generate_csv: bool = True, generate_wiki:bool=True,
+    sections_req:List[str]=["plot"]
 ):
     """The main helper function to scrape data in multiprocessing way
 
     Args:
         movie_name (str): The name of the movie along with the year
+        wikipedia_module: For getting the wikipedia data for a movie
         webdriver_engine (str, optional): The webdriver engine to use. Defaults to "edge".
-        generate_csv (bool, optional): whether to save the dataframe files. Defaults to False.
-
+        generate_csv (bool, optional): whether to save the dataframe files. Defaults to True.
+        generate_wiki (bool, optional): whether to save the wikipedia data. Defaults to True.
+        sections_req:List[str]: What sections from wikipedia data to include
     Returns:
         reviews_date (List): list of dates of each review
         reviews_title (List): list of title of each review
@@ -158,6 +164,7 @@ def main_scraper(
         reviews_title.append(title)
 
         # driver.quit()
+    save_name = "_".join(movie_name.split(" "))
     if generate_csv:
         os.makedirs("movie_reviews", exist_ok=True)
         df = pd.DataFrame(
@@ -170,7 +177,14 @@ def main_scraper(
         df["review_rating"] = reviews_rating
 
         # print(df)
-        save_name = "_".join(movie_name.split(" "))
+        
         df.to_csv(f"movie_reviews/{save_name}.csv", index=False)
-
+    if generate_wiki:
+        docs = WikipediaLoader(query=movie_name,load_max_docs=1,doc_content_chars_max=1).load()
+        wikipedia_title = docs[0].metadata['title']
+        page_py = wikipedia_module.page(wikipedia_title)
+        for s in page_py.sections:
+            if s.title.lower() in sections_req:
+                with open(f'wikipedia_data/{save_name}.txt','a') as file:
+                    file.writelines(s.text)
     return reviews_date, reviews_title, reviews_comment, reviews_rating

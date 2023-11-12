@@ -7,3 +7,9 @@ IMDbPY==2022.7.9
 
 #fire
 fire== 0.5.0
+
+#langchain
+langchain==0.0.334
+
+#wikipedia
+wikipedia-api==0.6.0
