@@ -79,7 +79,10 @@ def scrape_data(revs):
         title = revs.find_element(By.CLASS_NAME, "title").text.strip()
     except NoSuchElementException:
         title = ""
-
+    try:
+        link = revs.find_element(By.CLASS_NAME, "title").get_attribute('href')
+    except:
+        link = ""
     try:
         rating = revs.find_element(
             By.CLASS_NAME, "rating-other-user-rating"
@@ -91,7 +94,7 @@ def scrape_data(revs):
     contents.replace("//", "")
     date = revs.find_element(By.CLASS_NAME, "review-date").text
     contents = clean_text(contents)
-    return date, contents, rating, title
+    return date, contents, rating, title,link
 
 
 def main_scraper(
@@ -144,6 +147,7 @@ def main_scraper(
         except Exception:
             print("Load more operation complete")
             break
+        break
 
     driver.execute_script("window.scrollTo(0, 100);")
 
@@ -155,14 +159,15 @@ def main_scraper(
     reviews_comment = []
     reviews_rating = []
     reviews_title = []
+    reviews_link = []
     for result in results:
-        date, contents, rating, title = result
+        date, contents, rating, title,link = result
         reviews_date.append(date)
 
         reviews_comment.append(contents)
         reviews_rating.append(rating)
         reviews_title.append(title)
-
+        reviews_link.append(link)
         # driver.quit()
     save_name = "_".join(movie_name.split(" "))
     if generate_csv:
@@ -175,6 +180,7 @@ def main_scraper(
         df["review_title"] = reviews_title
         df["review_comment"] = reviews_comment
         df["review_rating"] = reviews_rating
+        df["review_link"] = reviews_link
 
         # print(df)
         
