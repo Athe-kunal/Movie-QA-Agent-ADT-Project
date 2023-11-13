@@ -98,7 +98,7 @@ def scrape_data(revs):
 
 
 def main_scraper(
-    movie_name: str, wikipedia_module,webdriver_engine: str = "edge", generate_csv: bool = True, generate_wiki:bool=True,
+    movie_name: str, wikipedia_module=None,webdriver_engine: str = "edge", generate_csv: bool = True, generate_wiki:bool=False,
     sections_req:List[str]=["plot"]
 ):
     """The main helper function to scrape data in multiprocessing way
@@ -147,13 +147,13 @@ def main_scraper(
         except Exception:
             print("Load more operation complete")
             break
-        break
 
     driver.execute_script("window.scrollTo(0, 100);")
-
+    num_reviews = driver.find_element(By.XPATH,'//*[@id="main"]/section/div[2]/div[1]/div/span').text
+    print(f"Total number of reviews are: {num_reviews}")
     rev_containers = driver.find_elements(By.CLASS_NAME, "review-container")
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
         results = executor.map(scrape_data, rev_containers)
     reviews_date = []
     reviews_comment = []
@@ -184,7 +184,8 @@ def main_scraper(
 
         # print(df)
         
-        df.to_csv(f"movie_reviews/{save_name}.csv", index=False)
+        df.to_csv(f"movie_reviews_link/{save_name}.csv", index=False)
+        print(f"Number of reviews scraped: {len(df)}")
     if generate_wiki:
         docs = WikipediaLoader(query=movie_name,load_max_docs=1,doc_content_chars_max=1).load()
         wikipedia_title = docs[0].metadata['title']
