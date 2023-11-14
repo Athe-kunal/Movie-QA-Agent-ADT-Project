@@ -30,4 +30,13 @@ def connect_mongo(mongo_uri:str,database_name:str="Moviedatabase",collection_nam
     movie_collection = movie_database[collection_name]
     return movie_collection
 
+def main_insert(reviews_folder:str="movie_reviews",wikipedia_folder:str="wikipedia_data"):
+    movie_collection = connect_mongo("mongodb+srv://imdb_adt:imdb_adt@cluster0.rcvxgzc.mongodb.net/")
+    insert_many_list = []
+    for movie in os.listdir(reviews_folder):
+        if ".csv" in movie:
+            movie_name = movie.split(".")[0]
+            movie_dict = insert_format(movie_name,review_folder=reviews_folder,wikipedia_folder=wikipedia_folder)
+            insert_many_list.append(movie_dict)
+    movie_collection.insert_many(insert_many_list)
 
