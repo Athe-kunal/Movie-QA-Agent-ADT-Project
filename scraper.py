@@ -156,9 +156,6 @@ def main_scraper(
                 EC.element_to_be_clickable((By.CLASS_NAME,"ipl-load-more__button"))
             )
             load_button.click()
-            # finally:
-            #     print("Load more operation complete")
-            #     break
         except Exception as e:
             print(f"Load more operation complete")
             break
@@ -168,15 +165,15 @@ def main_scraper(
     print(f"Total number of reviews are: {num_reviews}")
     rev_containers = driver.find_elements(By.CLASS_NAME, "review-container")
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         results = executor.map(scrape_data, rev_containers)
     reviews_date = []
     reviews_comment = []
     reviews_rating = []
     reviews_title = []
     reviews_link = []
-    for result in results:
-        date, contents, rating, title,link = result
+    for res in results:
+        date, contents, rating, title, link = res
         reviews_date.append(date)
 
         reviews_comment.append(contents)
