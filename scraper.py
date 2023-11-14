@@ -68,6 +68,7 @@ def scrape_data(revs):
         contents = revs.find_element(
             By.XPATH, "//div[contains(@class, 'text show-more__control')]"
         ).text
+        # time.sleep(1)
     except NoSuchElementException:
         contents = revs.find_element(By.CLASS_NAME, "content").text
         if contents == "":
@@ -98,7 +99,7 @@ def scrape_data(revs):
 
 
 def main_scraper(
-    movie_name: str, wikipedia_module=None,webdriver_engine: str = "edge", generate_csv: bool = True, generate_wiki:bool=False,
+    movie_name: str, wikipedia_module=None,webdriver_engine: str = "google", generate_csv: bool = True, generate_wiki:bool=False,
     sections_req:List[str]=["plot"]
 ):
     """The main helper function to scrape data in multiprocessing way
