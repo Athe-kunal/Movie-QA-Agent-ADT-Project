@@ -11,7 +11,8 @@ from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 import os
-import wikipediaapi
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from langchain.document_loaders import WikipediaLoader
 import pandas as pd
 from tqdm import tqdm
@@ -139,16 +140,29 @@ def main_scraper(
 
     driver.execute_script("return document.body.scrollHeight")
 
+    # while True:
+        # driver.execute_script("window.scrollTo(0, document.body.scrollHeight-250);")
+    #     try:
+    #         load_button = driver.find_element(By.CLASS_NAME, "ipl-load-more__button")
+    #         load_button.click()
+    #         time.sleep(1)
+    #     except Exception:
+    #         print("Load more operation complete")
+    #         break
     while True:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight-250);")
         try:
-            load_button = driver.find_element(By.CLASS_NAME, "ipl-load-more__button")
+            load_button = WebDriverWait(driver,5).until(
+                EC.element_to_be_clickable((By.CLASS_NAME,"ipl-load-more__button"))
+            )
             load_button.click()
-            time.sleep(1)
-        except Exception:
-            print("Load more operation complete")
+            # finally:
+            #     print("Load more operation complete")
+            #     break
+        except Exception as e:
+            print(f"Load more operation complete")
             break
-
+        
     driver.execute_script("window.scrollTo(0, 100);")
     num_reviews = driver.find_element(By.XPATH,'//*[@id="main"]/section/div[2]/div[1]/div/span').text
     print(f"Total number of reviews are: {num_reviews}")

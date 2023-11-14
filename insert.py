@@ -30,7 +30,7 @@ def connect_mongo(mongo_uri:str,database_name:str="Moviedatabase",collection_nam
     movie_collection = movie_database[collection_name]
     return movie_collection
 
-def main_insert(reviews_folder:str="movie_reviews",wikipedia_folder:str="wikipedia_data"):
+def main_insert(reviews_folder:str="movie_reviews_link",wikipedia_folder:str="wikipedia_data"):
     movie_collection = connect_mongo("mongodb+srv://imdb_adt:imdb_adt@cluster0.rcvxgzc.mongodb.net/")
     insert_many_list = []
     for movie in os.listdir(reviews_folder):
