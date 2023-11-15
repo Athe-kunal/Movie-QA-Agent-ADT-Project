@@ -24,7 +24,7 @@ def insert_format(movie_name:str,review_folder:str="movie_reviews_link",wikipedi
         movie_dict['reviews'].append({
             "date":convert_to_date(row['review_date']),
             "title":row['review_title'],
-            "review":row['review_comment'],
+            "comment":row['review_comment'],
             "rating":int(row['review_rating']),
             "link":row['review_link']}
         )
