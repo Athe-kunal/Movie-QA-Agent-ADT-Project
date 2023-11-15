@@ -10,7 +10,7 @@ def convert_to_date(date_str:str):
     return converted_date
 
 def insert_format(movie_name:str,review_folder:str="movie_reviews_link",wikipedia_folder:str="wikipedia_data"):
-    movie_dict = {}
+    
     csv_name = movie_name+".csv"
     txt_name = movie_name+".txt"
     movie_df = pd.read_csv(os.path.join(review_folder,csv_name))
@@ -18,20 +18,24 @@ def insert_format(movie_name:str,review_folder:str="movie_reviews_link",wikipedi
     movie_df.fillna(fill_values,inplace=True)
     with open(os.path.join(wikipedia_folder,txt_name), 'r') as f:
         wiki_data = f.read()
-    movie_dict.update({"MovieName":movie_name})
-    movie_dict.update({"reviews":[]})
+    # movie_dict.update({"reviews":[]})
+    movie_list = []
     for _,row in movie_df.iterrows():
-        movie_dict['reviews'].append({
+        movie_dict = {}
+        movie_dict.update({"MovieName":movie_name})
+        movie_dict.update({'reviews':{
             "date":convert_to_date(row['review_date']),
             "title":row['review_title'],
             "comment":row['review_comment'],
             "rating":int(row['review_rating']),
-            "link":row['review_link']}
+            "link":row['review_link']}}
         )
-    movie_dict.update({"wikipedia":{"plot":wiki_data}})
-    return movie_dict
+        movie_list.append(movie_dict)
+    movie_list.append({"MovieName":movie_name,"wikipedia":{"plot":wiki_data}})
+    # print(movie_list)
+    return movie_list
 
-def connect_mongo(mongo_uri:str,database_name:str="Moviedatabase",collection_name:str="database"):
+def connect_mongo(mongo_uri:str,database_name:str="Moviedatabase",collection_name:str="moviedata"):
     client = MongoClient(mongo_uri)
     movie_database = client.get_database(name=database_name)
     movie_collection = movie_database[collection_name]
@@ -44,7 +48,7 @@ def main_insert(reviews_folder:str="movie_reviews_link",wikipedia_folder:str="wi
         if ".csv" in movie:
             movie_name = movie.split(".")[0]
             movie_dict = insert_format(movie_name,review_folder=reviews_folder,wikipedia_folder=wikipedia_folder)
-            insert_many_list.append(movie_dict)
+            insert_many_list.extend(movie_dict)
     movie_collection.insert_many(insert_many_list)
 
 if __name__ == '__main__':

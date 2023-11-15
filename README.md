@@ -14,8 +14,14 @@ Then install all the dependencies
 pip install -r requirements.txt
 ```
 
-For a movie, pass the year and date in the command to save the the csv file in `movie_reviews` folder
+For a movie, pass the year and date in the command to save the the csv file in `movie_reviews_link` folder
 
 ```
 python main.py ---movie_name="Angry Birds 2016"  
+```
+
+To insert the data to MongoDB cluster, run
+
+```
+python insert.py
 ```
