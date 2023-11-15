@@ -1,6 +1,12 @@
 import pandas as pd
 import os
 from pymongo import MongoClient
+from datetime import datetime
+
+def convert_to_date(date_str:str):
+    date_format = "%d %B %Y"
+    converted_date = datetime.strptime(date_str, date_format)
+    return converted_date.date()
 
 def insert_format(movie_name:str,review_folder:str="movie_reviews_link",wikipedia_folder:str="wikipedia_data"):
     movie_dict = {}
@@ -15,16 +21,16 @@ def insert_format(movie_name:str,review_folder:str="movie_reviews_link",wikipedi
     movie_dict.update({"reviews":[]})
     for _,row in movie_df.iterrows():
         movie_dict['reviews'].append({
-            "date":row['review_date'],
+            "date":convert_to_date(row['review_date']),
             "title":row['review_title'],
             "review":row['review_comment'],
-            "rating":row['review_rating'],
+            "rating":int(row['review_rating']),
             "link":row['review_link']}
         )
     movie_dict.update({"wikipedia":{"plot":wiki_data}})
     return movie_dict
 
-def connect_mongo(mongo_uri:str,database_name:str="Moviedatabase",collection_name:str="Moviedatabase"):
+def connect_mongo(mongo_uri:str,database_name:str="Moviedatabase",collection_name:str="database"):
     client = MongoClient(mongo_uri)
     movie_database = client.get_database(name=database_name)
     movie_collection = movie_database[collection_name]

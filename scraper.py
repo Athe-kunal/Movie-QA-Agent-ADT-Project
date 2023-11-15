@@ -67,7 +67,7 @@ def scrape_data(revs):
         spolier_btn = revs.find_element(By.CLASS_NAME, "ipl-expander")
         spolier_btn.click()
         contents = revs.find_element(
-            By.XPATH, "//div[contains(@class, 'text show-more__control')]"
+            By.CLASS_NAME, "content"
         ).text
         # time.sleep(1)
     except NoSuchElementException:
