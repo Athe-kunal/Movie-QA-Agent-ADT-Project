@@ -6,7 +6,8 @@ from datetime import datetime
 def convert_to_date(date_str:str):
     date_format = "%d %B %Y"
     converted_date = datetime.strptime(date_str, date_format)
-    return converted_date.date()
+    # date = converted_date.date()
+    return converted_date
 
 def insert_format(movie_name:str,review_folder:str="movie_reviews_link",wikipedia_folder:str="wikipedia_data"):
     movie_dict = {}
@@ -46,3 +47,5 @@ def main_insert(reviews_folder:str="movie_reviews_link",wikipedia_folder:str="wi
             insert_many_list.append(movie_dict)
     movie_collection.insert_many(insert_many_list)
 
+if __name__ == '__main__':
+    main_insert()
