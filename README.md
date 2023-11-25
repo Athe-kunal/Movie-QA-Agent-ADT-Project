@@ -27,16 +27,17 @@ python insert.py
 ```
 
 TO-DOS
-1. Data collection (Astarag)
-2. CRUD: Read (rating, movie, date, spoiler filters, plot data). Update the newer reviews from IMDB or wikipedia, delete (delete cuss words movie reviews)
+1. Data collection (Astarag) (Done) and Upload the data to MongoDB cluster
+2. CRUD: Read (rating, date, plot data) (C&D). Update the newer reviews from IMDB or wikipedia (A) [cuss words [NONE]], delete (C&D) (delete cuss words movie reviews and irrelevant reviews (helpful=0 and total votes = 0 and length of review is less than 20))
 3. LLM (Astarag and Diskha)
-4. Frontend and deployment(Chandu) UX design
+4. Frontend(without LLM) and deployment(Chandu) UX design
+5. Frontend with LLM (Diksha)
 
 Application
-1. Distribution of ratings (Pie chart)
-2. Wordcloud
-3. Most recent reviews
-4. Most helpful reviews (top-10)
-5. Spoiler based reviews
-6. Keyword based filtering
+1. Distribution of ratings (Pie chart) (D)
+2. Wordcloud (D)
+3. Most recent reviews (D)
+4. Most helpful reviews (top-10) (C)
+5. Spoiler based reviews (C)
+6. Keyword based filtering (C)
 7. LLM Chat agent
