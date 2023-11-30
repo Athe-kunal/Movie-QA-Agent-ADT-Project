@@ -47,11 +47,12 @@ def insert_format(
                     "helpful": row["review_helpful"],
                     "total_votes": row["review_total_votes"],
                     "if_spoiler": row["reviews_if_spoiler"],
+                    "source": "imdb",
                 }
             }
         )
         movie_list.append(movie_dict)
-    movie_list.append({"MovieName": movie_name, "wikipedia": {"plot": wiki_data}})
+    movie_list.append({"MovieName": movie_name, "source": "wikipedia"})
 
     return movie_list
 

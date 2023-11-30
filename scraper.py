@@ -204,7 +204,7 @@ def main_scraper(
         reviews_if_spoiler.append(spoiler)
         pbar.update(1)
     save_name = "_".join(movie_name.split(" "))
-    save_name = re.sub(":","",save_name)
+    save_name = re.sub(":", "", save_name)
     if generate_csv:
         os.makedirs(SAVE_FOLDER, exist_ok=True)
         df = pd.DataFrame(
