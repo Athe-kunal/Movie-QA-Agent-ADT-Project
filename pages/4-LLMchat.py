@@ -49,8 +49,12 @@ if st.session_state.messages[-1]["role"] != "assistant":
             docs = generate_response(prompt) 
             print(docs)
             st.write(docs["result"]) 
-            expander = st.expander("See relevant Sources")
-            citation_links = [doc.metadata['link'] for doc in docs]
-            expander.text(citation_links)
+            expander = st.expander("See relevant IMDB movie review links")
+            citation_links = [doc.metadata['link'] for doc in docs['source_documents']]
+            sources_text = ""
+            for idx,link in enumerate(citation_links):
+                sources_text+=f"[Source Link {idx}]({link})"
+                sources_text+="\n\n"
+            expander.write(sources_text)
     message = {"role": "assistant", "content": docs['result']}
     st.session_state.messages.append(message)
