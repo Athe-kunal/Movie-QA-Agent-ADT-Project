@@ -21,3 +21,6 @@ sentence-transformers
 
 #frontend
 streamlit
+
+#LLM
+openai
