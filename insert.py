@@ -38,7 +38,6 @@ def insert_format(
         movie_dict.update({"MovieName": movie_name})
         movie_dict.update(
             {
-                "reviews": {
                     "date": convert_to_date(row["review_date"]),
                     "title": row["review_title"],
                     "comment": row["review_comment"],
@@ -47,8 +46,7 @@ def insert_format(
                     "helpful": row["review_helpful"],
                     "total_votes": row["review_total_votes"],
                     "if_spoiler": row["reviews_if_spoiler"],
-                    "source": "imdb",
-                }
+                    "source": "imdb"
             }
         )
         movie_list.append(movie_dict)
