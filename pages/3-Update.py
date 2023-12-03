@@ -7,12 +7,13 @@ import numpy as np
 
 st.set_page_config(layout="wide")
 st.title("Update")
-client = MongoClient(MONGODB_CLUSTER)
-movie_database = client.get_database(name=DATABASE_NAME)
-movie_collection = movie_database[COLLECTION_NAME]
+conn_str = "mongodb+srv://imdb_adt:imdb_adt@cluster0.rcvxgzc.mongodb.net/"
+client = MongoClient(conn_str, serverSelectionTimeoutMS=60000)
+db = client['Moviedatabase']
+collection = db['moviedata']
 
 revs = []
-for rev in movie_collection.find({"MovieName":"Parasite_2019"}).sort("helpful",pymongo.DESCENDING).limit(11):
+for rev in collection.find({"MovieName":"Parasite_2019"}).sort("helpful",pymongo.DESCENDING).limit(11):
     if rev['source']=="imdb":
         revs.append(rev)
 df = pd.DataFrame(revs)
@@ -44,9 +45,9 @@ selection = dataframe_with_selections(df)
 selected_ids = [ids[select_id] for select_id in selection]
 
 def update_database(selected_ids):
-    movie_collection.update_many
+    collection.update_many
     for select_id in selected_ids:
-        movie_collection.update_many({'_id': select_id}, [{'$inc': {'helpful': 1}},{'$inc': {'total_votes': 1}}])
+        collection.update_many({'_id': select_id}, [{'$inc': {'helpful': 1}},{'$inc': {'total_votes': 1}}])
 if 'clicked' not in st.session_state:
     st.session_state.clicked = False
 
