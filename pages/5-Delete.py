@@ -1,12 +1,12 @@
 import streamlit as st
 from pymongo import MongoClient
 import os
-
+from config import *
 # MongoDB setup
-conn_str = "mongodb+srv://imdb_adt:imdb_adt@cluster0.rcvxgzc.mongodb.net/"
-client = MongoClient(conn_str, serverSelectionTimeoutMS=60000)
-db = client['Moviedatabase']
-collection = db['moviedata']
+# conn_str = "mongodb+srv://imdb_adt:imdb_adt@cluster0.rcvxgzc.mongodb.net/"
+client = MongoClient(MONGODB_CLUSTER, serverSelectionTimeoutMS=60000)
+db = client[DATABASE_NAME]
+collection = db[COLLECTION_NAME]
 
 # Streamlit UI
 st.title("Movie Review Manager")
