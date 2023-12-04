@@ -4,13 +4,14 @@ import streamlit as st
 import pandas as pd
 import pymongo
 import numpy as np
+from config import * 
+from bson.objectid import ObjectId
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide",initial_sidebar_state ="collapsed")
 st.title("Update")
-conn_str = "mongodb+srv://imdb_adt:imdb_adt@cluster0.rcvxgzc.mongodb.net/"
-client = MongoClient(conn_str, serverSelectionTimeoutMS=60000)
-db = client['Moviedatabase']
-collection = db['moviedata']
+client = MongoClient(MONGODB_CLUSTER, serverSelectionTimeoutMS=60000)
+db = client[DATABASE_NAME]
+collection = db[COLLECTION_NAME]
 
 revs = []
 for rev in collection.find({"MovieName":"Parasite_2019"}).sort("helpful",pymongo.DESCENDING).limit(11):
@@ -45,9 +46,19 @@ selection = dataframe_with_selections(df)
 selected_ids = [ids[select_id] for select_id in selection]
 
 def update_database(selected_ids):
-    collection.update_many
     for select_id in selected_ids:
-        collection.update_many({'_id': select_id}, [{'$inc': {'helpful': 1}},{'$inc': {'total_votes': 1}}])
+        select_id = ObjectId(select_id)
+        update_criteria = {
+            "_id": select_id}
+        update_action = {
+            "$inc": {
+                "helpful": 1,
+                "total_votes": 1
+            }
+        }
+        collection.update_one(update_criteria, update_action)
+    
+
 if 'clicked' not in st.session_state:
     st.session_state.clicked = False
 
@@ -58,8 +69,4 @@ st.button("Submit Update",help="It will submit the reviews that you selected to 
 
 if st.session_state.clicked:
     update_database(selected_ids)
-    st.write("Updated the database")
-
-
-
-        
+    st.write("Updated the database, refresh to see the results")
