@@ -5,6 +5,7 @@ import openai
 from config import *
 from dotenv import load_dotenv
 from pymongo import MongoClient
+import pymongo
 import os
 from langchain.vectorstores import MongoDBAtlasVectorSearch
 from langchain.embeddings import SentenceTransformerEmbeddings

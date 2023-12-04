@@ -18,9 +18,6 @@ import imdb
 from typing import List
 from config import *
 
-os.makedirs(SAVE_FOLDER, exist_ok=True)
-os.makedirs("wikipedia_data", exist_ok=True)
-
 
 def clean_text(text: str) -> str:
     """Clean raw text string.
@@ -121,7 +118,7 @@ def process_muted_text(mute_text: str) -> (float, float):
 def main_scraper(
     movie_name: str,
     wikipedia_module=None,
-    webdriver_engine: str = "google",
+    webdriver_engine: str = "edge",
     generate_csv: bool = True,
     generate_wiki: bool = False,
     sections_req: List[str] = ["plot"],
@@ -141,6 +138,8 @@ def main_scraper(
         reviews_comment (List): list of comment of each review
         reviews_rating (List):  list of ratings of each review
     """
+    os.makedirs(SAVE_FOLDER, exist_ok=True)
+    os.makedirs("wikipedia_data", exist_ok=True)
     ia = imdb.Cinemagoer()
     movies = ia.search_movie(movie_name)
     movie_name = movies[0].data["title"] + " " + str(movies[0].data["year"])
@@ -172,7 +171,6 @@ def main_scraper(
         except Exception as e:
             print(f"Load more operation complete")
             break
-
     driver.execute_script("window.scrollTo(0, 100);")
     num_reviews = driver.find_element(
         By.XPATH, '//*[@id="main"]/section/div[2]/div[1]/div/span'

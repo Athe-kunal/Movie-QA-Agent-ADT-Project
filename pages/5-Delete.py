@@ -15,7 +15,7 @@ st.title("Movie Review Manager")
 movie_name = st.text_input("Enter the movie name:", "Parasite_2019")
 
 # Button to delete reviews
-if st.button('Delete Required Reviews'):
+if st.button('Delete unnecessary Reviews'):
     try:
         # MongoDB operation to delete reviews
         # Reviews with 'helpful' equal to 0 and 20 words or fewer in 'text'
