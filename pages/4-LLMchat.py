@@ -25,8 +25,8 @@ MONGODB_COLLECTION = client[DATABASE_NAME][VECTORDB_COLLECTION_NAME]
 # openai.api_key = some_key
 
 st.write("For security purposes, we can't upload API keys to GitHub, please provide your API keys for OpenAI and HuggingFace")
-open_api_key = st.text_input(label="Enter your OpenAI API Key: ",value="")
-hf_api_key = st.text_input(label="Enter your HuggingFace API Key: ",value="")
+open_api_key = st.text_input(label="Enter your OpenAI API Key: ",value="",type="password")
+hf_api_key = st.text_input(label="Enter your HuggingFace API Key: ",value="",type="password")
 
 openai.api_key = open_api_key
 
