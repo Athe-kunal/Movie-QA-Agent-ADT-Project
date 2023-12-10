@@ -27,3 +27,6 @@ openai
 
 #MongoDB
 pymongo
+
+#Plot
+matplotlib
