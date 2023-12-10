@@ -24,3 +24,6 @@ streamlit
 
 #LLM
 openai
+
+#MongoDB
+pymongo
