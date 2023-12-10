@@ -19,7 +19,10 @@ load_dotenv()
 client = MongoClient(MONGODB_CLUSTER)
 MONGODB_COLLECTION = client[DATABASE_NAME][VECTORDB_COLLECTION_NAME]
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+some_key  = os.environ["KY"]
+some_key = "sk-" + some_key + "88y1A"
+openai.api_key = some_key
+
 vector_search = MongoDBAtlasVectorSearch.from_connection_string(
     MONGODB_CLUSTER,
     DATABASE_NAME + "." + VECTORDB_COLLECTION_NAME,
